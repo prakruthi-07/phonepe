@@ -4,7 +4,7 @@ pipeline {
         maven 'maven'
     }
     environment{
-        DOCKERHUB_USERNAME = ""
+        DOCKERHUB_USERNAME = "prakru07"
     }
     stages {
         stage("clean") {
@@ -52,9 +52,17 @@ pipeline {
                     docker tag phonepe ${DOCKERHUB_USERNAME}/phonepe
                     docker push ${DOCKERHUB_USERNAME}/phonepe
                     """
-
+                }
+                post {
+                success{
+                    echo "image pushed successfully"
+                }
+                failure{
+                    echo "image not pushed"
                 }
             }
+            }
+                
         }
         stage("remove docker image locally"){
             steps{
@@ -63,6 +71,14 @@ pipeline {
                 docker rmi -f phonepe
                 """
             }
+            post {
+                success{
+                    echo "removed local image successfully"
+                }
+                failure{
+                    echo "image not removed locally"
+                }
+            }
         }
         stage("stop and restart"){
             steps {
@@ -70,6 +86,14 @@ pipeline {
                 docker rm -f app
                 docker run -it -d --name app -p 8081:8080 ${DOCKERHUB_USERNAME}/phonepe
                 """
+            }
+            post {
+                success{
+                    echo "image build successfully"
+                }
+                failure{
+                    echo "image not built"
+                }
             }
         }
     }
