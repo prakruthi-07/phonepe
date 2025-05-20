@@ -34,7 +34,7 @@ pipeline {
         }
         stage("build docker images") {
             steps {
-                sh 'docker build -t phonepe .'
+                sh 'sudo docker build -t phonepe .'
             }
             post {
                 success{
