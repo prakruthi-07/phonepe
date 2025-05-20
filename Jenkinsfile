@@ -32,7 +32,7 @@ pipeline {
         }
         stage("build docker images") {
             steps {
-                sh 'docker build -t httpd'
+                sh 'docker buildx build -t httpd .'
             }
             post {
                 success{
