@@ -32,7 +32,7 @@ pipeline {
         }
         stage("build docker images") {
             steps {
-                sh 'docker buildx build -t httpd .'
+                sh 'docker build -t phonepe .'
             }
             post {
                 success{
@@ -47,8 +47,8 @@ pipeline {
             steps{
                 script {
                     sh"""
-                    docker tag httpd prakru07/httpd
-                    docker push prakru07/httpd
+                    docker tag phonepe prakru07/phonepe
+                    docker push prakru07/phonepe
                     """
                 }
                 post {
@@ -65,8 +65,8 @@ pipeline {
         stage("remove docker image locally"){
             steps{
                 sh"""
-                docker rmi -f prakru07/httpd
-                docker rmi -f httpd
+                docker rmi -f prakru07/phonepe
+                docker rmi -f phonepe
                 """
             }
             post {
@@ -82,7 +82,7 @@ pipeline {
             steps {
                 sh"""
                 docker rm -f app
-                docker run -it -d --name app -p 8081:8080 prakru07/httpd
+                docker run -it -d --name app -p 8081:8080 prakru07/phonepe
                 """
             }
             post {
