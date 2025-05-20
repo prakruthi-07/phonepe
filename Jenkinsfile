@@ -3,9 +3,7 @@ pipeline {
     tools {
         maven 'maven'
     }
-    environment{
-        DOCKERHUB_USERNAME = "prakru07"
-    }
+    
     stages {
         stage("clean") {
             steps {
@@ -34,7 +32,7 @@ pipeline {
         }
         stage("build docker images") {
             steps {
-                sh 'sudo docker build -t phonepe .'
+                sh 'sudo usermod -aG docker $USER'
             }
             post {
                 success{
@@ -49,8 +47,8 @@ pipeline {
             steps{
                 script {
                     sh"""
-                    docker tag phonepe ${DOCKERHUB_USERNAME}/phonepe
-                    docker push ${DOCKERHUB_USERNAME}/phonepe
+                    docker tag phonepe prakru07/phonepe
+                    docker push prakru07/phonepe
                     """
                 }
                 post {
@@ -67,7 +65,7 @@ pipeline {
         stage("remove docker image locally"){
             steps{
                 sh"""
-                docker rmi -f ${DOCKERHUB_USERNAME}/phonepe
+                docker rmi -f prakru07/phonepe
                 docker rmi -f phonepe
                 """
             }
@@ -84,7 +82,7 @@ pipeline {
             steps {
                 sh"""
                 docker rm -f app
-                docker run -it -d --name app -p 8081:8080 ${DOCKERHUB_USERNAME}/phonepe
+                docker run -it -d --name app -p 8081:8080 prakru07/phonepe
                 """
             }
             post {
